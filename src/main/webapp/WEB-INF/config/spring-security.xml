@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans xmlns:beans="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns="http://www.springframework.org/schema/security"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xsi:schemaLocation="http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-3.2.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.2.xsd">
+
+	<context:component-scan base-package="com.mithun" />
+
+	<!-- <http entry-point-ref="restAuthenticationEntryPoint">
+		<intercept-url pattern="/webapi/**" access="ROLE_ADMIN" requires-channel="http" />
+		<form-login authentication-success-handler-ref="mySuccessHandler"
+			authentication-failure-handler-ref="myFailureHandler" />
+		<logout />
+		<custom-filter ref="restServicesFilter" before="PRE_AUTH_FILTER" />
+		<http-basic />
+	</http> -->
+	
+	<http auto-config='true'>
+		<!-- <intercept-url pattern="/login.html" access="IS_AUTHENTICATED_ANONYMOUSLY" />
+		<intercept-url pattern="/loginFailed.html" access="IS_AUTHENTICATED_ANONYMOUSLY" />
+		<intercept-url pattern="/logout.html" access="IS_AUTHENTICATED_ANONYMOUSLY" />
+		<intercept-url pattern="/403.html" access="IS_AUTHENTICATED_ANONYMOUSLY" /> -->
+		<intercept-url pattern="/**" access="ROLE_USER" />
+		<!-- <form-login login-page="/login.html" authentication-failure-url="/loginFailed.html" />
+		<logout logout-success-url="/logout.html"/>
+		<access-denied-handler error-page="/403.html"/> -->
+		<http-basic />
+	</http>
+
+	<authentication-manager alias="authenticationManager">
+		<authentication-provider>
+			<user-service>
+				<user name="temporary" password="temporary" authorities="ROLE_ADMIN" />
+				<user name="user" password="user" authorities="ROLE_USER" />
+			</user-service>
+		</authentication-provider>
+	</authentication-manager>
+
+	<!-- <beans:bean id="mySuccessHandler"
+		class="com.mithun.auth.MySavedRequestAwareAuthenticationSuccessHandler" />
+		
+	<beans:bean id="myFailureHandler"
+		class="com.mithun.auth.MySavedRequestAwareAuthenticationFailureHandler" />
+
+	<beans:bean id="restServicesFilter" 
+		class="com.mithun.auth.RestUsernamePasswordAuthenticationFilter" 
+		p:postOnly="false"
+		p:authenticationManager-ref="authenticationManager"
+		p:authenticationSuccessHandler-ref="mySuccessHandler"/>		 -->
+		
+	
+
+</beans:beans>
